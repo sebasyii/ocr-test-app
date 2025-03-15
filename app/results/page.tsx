@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { InlineMath, BlockMath } from "react-katex";
@@ -102,7 +103,7 @@ const ResultPage = () => {
       if (React.isValidElement(child)) {
         const props = child.props as { children?: React.ReactNode };
         if (props.children) {
-          return React.cloneElement(child as React.ReactElement<any>, {
+          return React.cloneElement(child as React.ReactElement<{ children: React.ReactNode }>, {
             children: processChildren(props.children)
           });
         }
@@ -154,11 +155,35 @@ const ResultPage = () => {
                 if (match && currentPageData.images) {
                   const index = parseInt(match[1]);
                   const imageData = currentPageData.images[index];
-                  if (imageData) {
-                    return <img src={imageData.imageBase64} alt={alt || `Image ${index}`} className="max-w-full h-auto" />;
+                  if (imageData?.imageBase64) {
+                    return (
+                      // For base64 images, we need to use regular img tag
+                      <img 
+                        src={imageData.imageBase64}
+                        alt={alt || `Image ${index}`}
+                        className="max-w-full h-auto"
+                        style={{
+                          width: imageData.width || 'auto',
+                          height: imageData.height || 'auto'
+                        }}
+                      />
+                    );
                   }
                 }
-                return <img src={src || ''} alt={alt || ''} className="max-w-full h-auto" />;
+                if (src) {
+                  return (
+                    // For regular URLs, use Next.js Image
+                    <Image 
+                      src={src}
+                      alt={alt || ''}
+                      width={800}
+                      height={600}
+                      className="max-w-full h-auto"
+                      unoptimized={src.startsWith('data:')} // Skip optimization for data URLs
+                    />
+                  );
+                }
+                return null;
               },
               // Handle any component that might contain math
               p: ({children}) => <p>{processChildren(children)}</p>,

@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useActionState } from "react";
 import { useRouter } from "next/navigation";
-import { useEffect, useCallback } from "react";
+import { useEffect } from "react";
 import { useOCRStore } from "@/lib/store";
 import {
   Form,
@@ -18,7 +18,7 @@ import {
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { onSubmitAction } from "@/app/formSubmit";
-import { Loader2, X } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { fileSchema } from "@/app/fileSchema";
 
 type FormData = z.infer<typeof fileSchema>;

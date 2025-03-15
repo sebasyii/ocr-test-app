@@ -4,8 +4,15 @@ import { persist } from 'zustand/middleware';
 export interface OCRPage {
   index: number;
   markdown: string;
-  images: any[];
-  dimensions?: any | null;
+  images?: Array<{
+    imageBase64?: string | null;
+    width?: number;
+    height?: number;
+  }>;
+  dimensions?: {
+    width: number;
+    height: number;
+  } | null;
 }
 
 export interface OCRResponse {

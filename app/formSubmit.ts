@@ -2,12 +2,13 @@
 
 import { Mistral } from "@mistralai/mistralai";
 import { fileSchema } from "./fileSchema";
+import type { OCRResponse } from "@/lib/store";
 
 export type FormState = {
   message: string;
   fields?: Record<string, string>;
   issues?: string[];
-  data?: any;
+  data?: OCRResponse;
   redirect?: string;
 };
 
